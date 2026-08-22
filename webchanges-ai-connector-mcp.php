@@ -91,6 +91,28 @@ add_action('admin_init', static function () {
     webchanges_connector_handle_admin_actions();
 });
 
+// Core renders the Plugin URI as a same-tab "Visit plugin site" link in the
+// plugins list. Send it to a new tab instead, matched on the href so the
+// thickbox "View details" link .org adds later keeps opening in its modal.
+add_filter('plugin_row_meta', static function ($meta, $file, $plugin_data) {
+    if (!is_array($meta) || $file !== plugin_basename(WEBCHANGES_CONNECTOR_FILE)) {
+        return $meta;
+    }
+    $uri = isset($plugin_data['PluginURI']) ? (string) $plugin_data['PluginURI'] : '';
+    if ($uri === '') {
+        return $meta;
+    }
+    $needle = 'href="' . esc_url($uri) . '"';
+    foreach ($meta as $i => $link) {
+        if (!is_string($link) || strpos($link, $needle) === false || strpos($link, 'target=') !== false) {
+            continue;
+        }
+        $meta[$i] = str_replace('<a ', '<a target="_blank" rel="noopener noreferrer" ', $link);
+    }
+
+    return $meta;
+}, 10, 3);
+
 // Run one-time, per-version migrations before abilities register — notably the
 // grandfathering of high-risk abilities for already-active installs (new
 // installs get them off by default). Cheap no-op once the version is recorded.
