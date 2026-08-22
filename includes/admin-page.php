@@ -186,7 +186,7 @@ function webchanges_connector_render_admin_page(): void
 
         .wc-card {
             position: relative;
-            border-radius: 16px;
+            border-radius: 6px;
             background: var(--wc-glass);
             backdrop-filter: blur(28px) saturate(140%);
             -webkit-backdrop-filter: blur(28px) saturate(140%);
@@ -512,7 +512,7 @@ function webchanges_connector_render_admin_page(): void
             align-items: center;
             gap: 12px;
             margin: 0;
-            padding: 22px 24px;
+            padding: 12px 15px;
         }
         details.wc-card-collapsible > summary::-webkit-details-marker { display: none; }
         details.wc-card-collapsible > summary::after {
@@ -529,10 +529,10 @@ function webchanges_connector_render_admin_page(): void
             transform: rotate(45deg);
             border-color: var(--wc-accent);
         }
-        details.wc-card-collapsible[open] > summary { padding-bottom: 14px; }
-        details.wc-card-collapsible > *:not(summary) { padding-left: 24px; padding-right: 24px; }
-        details.wc-card-collapsible > *:last-child { padding-bottom: 22px; }
-        details.wc-card-collapsible > form { padding-bottom: 22px; }
+        details.wc-card-collapsible[open] > summary { padding-bottom: 8px; }
+        details.wc-card-collapsible > *:not(summary) { padding-left: 15px; padding-right: 15px; }
+        details.wc-card-collapsible > *:last-child { padding-bottom: 15px; }
+        details.wc-card-collapsible > form { padding-bottom: 15px; }
 
         .wc-step {
             display: grid;
@@ -555,18 +555,18 @@ function webchanges_connector_render_admin_page(): void
             font-variant-numeric: tabular-nums;
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
         }
-        .wc-step-body { min-width: 0; }
+        .wc-step-body { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
         .wc-step-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--wc-fg);
             letter-spacing: -0.1px;
-            margin: 0 0 6px;
+            margin: 0;
         }
         .wc-step-desc {
-            font-size: 13.5px;
+            font-size: 12px;
             color: var(--wc-fg-muted);
-            margin: 0 0 16px;
+            margin: 0;
             line-height: 1.55;
         }
         .wc-step-divider {

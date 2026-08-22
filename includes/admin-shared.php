@@ -119,7 +119,7 @@ function webchanges_connector_admin_theme_css(): string
         @media (min-width: 1180px) { .wc-grid-2 { grid-template-columns: 1.55fr 1fr; align-items: start; } }
 
         .wc-card {
-            position: relative; border-radius: 16px;
+            position: relative; border-radius: 6px;
             background: var(--wc-glass);
             backdrop-filter: blur(28px) saturate(140%); -webkit-backdrop-filter: blur(28px) saturate(140%);
             border: 1px solid var(--wc-glass-border);
