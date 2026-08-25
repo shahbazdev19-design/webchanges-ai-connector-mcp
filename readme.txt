@@ -33,11 +33,12 @@ Only three meta tools are exposed over MCP (discover-abilities, get-ability-info
 
 == External services ==
 
-This plugin does not contact any external service on its own. It only connects to a third-party service when you explicitly configure that service's API key and an action uses it:
+This plugin contacts no external service on its own initiative - nothing is sent in the background, on activation, or on a schedule. A third-party service is reached only when an action you run (or that an AI client you have authorised runs) uses it. Every provider below except Pollinations additionally requires you to save that provider's API key before it can be reached:
 
 * **OpenAI** (optional, image generation) — when you add an OpenAI API key and an agent generates/edits an image, the prompt (and, for edits, the source image) is sent to api.openai.com. Terms: https://openai.com/policies/terms-of-use — Privacy: https://openai.com/policies/privacy-policy
 * **Google Gemini / Imagen** (optional, image generation) — when configured, prompts are sent to generativelanguage.googleapis.com. Terms: https://ai.google.dev/gemini-api/terms — Privacy: https://policies.google.com/privacy
 * **Replicate** (optional, image generation) — when configured, prompts are sent to api.replicate.com. Terms: https://replicate.com/terms — Privacy: https://replicate.com/privacy
+* **Pollinations** (optional, image generation - no API key needed) - the only provider that needs no key, so it can be used without configuring anything. It is never a default and never an automatic fallback: it is contacted only when an image-generation request explicitly names the `pollinations` provider, and only your image prompt and the requested dimensions are sent to image.pollinations.ai. Terms: https://pollinations.ai/terms - Privacy: https://pollinations.ai/privacy
 * **Pexels / Unsplash / Pixabay** (optional, stock photos) — when you add a key and an agent fetches stock photos, your search query is sent to the respective API. Pexels: https://www.pexels.com/terms-of-service/ , https://www.pexels.com/privacy-policy/ — Unsplash: https://unsplash.com/terms , https://unsplash.com/privacy — Pixabay: https://pixabay.com/service/terms/ , https://pixabay.com/service/privacy/
 
 Optional, opt-in usage telemetry (OFF by default): if — and only if — you turn it on, the plugin sends your site URL, site name, plugin/WordPress/PHP versions, and multisite flag to https://webchanges.searchactions.com/api/plugin/activations so the maintainer can count active installs. No content or credentials are ever sent. Nothing is transmitted unless you opt in.
