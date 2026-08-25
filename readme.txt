@@ -1,5 +1,5 @@
 === Webchanges – AI Connector (MCP) ===
-Contributors: shahbazdev
+Contributors: shahbazdev19
 Tags: mcp, ai, automation, content, seo
 Requires at least: 6.9
 Tested up to: 7.1
