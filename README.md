@@ -121,26 +121,27 @@ abilities that WordPress.org guidelines exclude.
 runtime tree the plugin ships with. Do **not** run `composer install` or
 `composer update` against it.
 
-To build a distributable zip — WordPress.org rejects hidden files, so every
-dot-file and dot-directory is excluded, along with dev artefacts:
+To build a distributable zip:
 
 ```bash
-python - <<'PY'
-import os, zipfile
-src = os.getcwd(); top = "webchanges-ai-connector-mcp"
-out = os.path.join(os.path.dirname(src), top + ".zip")
-SKIP = {"HANDOVER.md", "composer.lock"}
-with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-    for r, d, fs in os.walk(src):
-        d[:] = [x for x in d if not x.startswith(".")]
-        for f in fs:
-            if f.startswith(".") or f in SKIP:
-                continue
-            p = os.path.join(r, f)
-            z.write(p, top + "/" + os.path.relpath(p, src).replace(os.sep, "/"))
-print("built", out)
-PY
+python .github/build-zip.py
 ```
+
+It excludes every dot-file and dot-directory (WordPress.org rejects hidden
+files) and refuses to build if the version strings disagree, if a second file
+carries a `Plugin Name:` header, or if anything hidden would ship.
+
+CI runs the same script: [Plugin Check](.github/workflows/plugin-check.yml) on
+every push, and [Release](.github/workflows/release.yml) on a version tag, which
+publishes the zip as a release asset.
+
+## Installing from GitHub
+
+Use a [release asset](../../releases), not the green **Code -> Download ZIP**
+button. That button produces a *source archive* named `<repo>-<branch>`, so it
+unpacks to `webchanges-ai-connector-mcp-main/` and keeps dot-files -- WordPress
+then treats it as a differently-slugged plugin and Plugin Check reports a text
+domain mismatch on every string.
 
 ## License
 

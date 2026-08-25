@@ -1,0 +1,63 @@
+name: Release
+
+# Tag a version and this publishes the installable zip as a release asset.
+# Release assets download under the exact filename uploaded, so users get
+# webchanges-ai-connector-mcp.zip -- not the "-main" source archive GitHub's
+# "Download ZIP" button produces, which is not installable as a plugin.
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version from the tag
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$REF_TYPE" = "tag" ]; then
+            echo "value=${REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Fails the build if the three version strings disagree with the tag, if a
+      # second file carries a "Plugin Name:" header, or if anything hidden would
+      # ship. Better a red build than a broken release.
+      - name: Build and verify the plugin zip
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          mkdir -p dist
+          if [ -n "$VERSION" ]; then
+            python3 .github/build-zip.py --version "$VERSION" --out dist/webchanges-ai-connector-mcp.zip
+          else
+            python3 .github/build-zip.py --out dist/webchanges-ai-connector-mcp.zip
+          fi
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webchanges-ai-connector-mcp
+          path: dist/webchanges-ai-connector-mcp.zip
+
+      - name: Publish release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" dist/webchanges-ai-connector-mcp.zip \
+            --title "$TAG" \
+            --generate-notes

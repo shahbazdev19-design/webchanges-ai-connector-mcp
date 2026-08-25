@@ -1,0 +1,27 @@
+name: Plugin Check
+
+# Runs WordPress.org's own Plugin Check against the exact tree that ships.
+# It scans the built folder, not the repo checkout, so the folder name is the
+# real slug (no "-main" text-domain false positives) and no dot-files are present.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  plugin-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the tree that ships
+        run: |
+          python3 .github/build-zip.py --out "$RUNNER_TEMP/plugin.zip"
+          mkdir -p build
+          unzip -q "$RUNNER_TEMP/plugin.zip" -d build
+
+      - name: Run WordPress Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          build-dir: ./build/webchanges-ai-connector-mcp
