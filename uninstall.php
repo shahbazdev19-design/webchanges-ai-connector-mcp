@@ -39,7 +39,6 @@ function webchanges_connector_uninstall_options(): array
         'webchanges_connector_jobs_latest',
         'webchanges_connector_version',
         'webchanges_connector_delivery_fallback',
-        'webchanges_connector_telemetry_optin',
     ];
 }
 
@@ -53,8 +52,6 @@ function webchanges_connector_uninstall_site(): void
     foreach (webchanges_connector_uninstall_options() as $option) {
         delete_option($option);
     }
-
-    delete_transient('webchanges_connector_hb_sent');
 
     // Per-job options (`webchanges_connector_job_<id>`) and job lock transients
     // (`wcc_job_lock_<id>`) are created dynamically, so they need a LIKE sweep.
@@ -72,7 +69,6 @@ function webchanges_connector_uninstall_site(): void
     }
 
     wp_clear_scheduled_hook('webchanges_connector_job_run');
-    wp_clear_scheduled_hook('webchanges_connector_heartbeat');
 }
 
 /**

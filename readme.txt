@@ -27,7 +27,7 @@ Only three meta tools are exposed over MCP (discover-abilities, get-ability-info
 
 = Requirements =
 
-* WordPress 6.9+ (the Abilities API is included in core), or the standalone "Abilities API" plugin on older versions.
+* WordPress 6.9 or newer - the Abilities API ships in core from 6.9.
 * PHP 8.0+.
 * An MCP-compatible AI client to connect.
 
@@ -41,11 +41,10 @@ This plugin contacts no external service on its own initiative - nothing is sent
 * **Pollinations** (optional, image generation - no API key needed) - the only provider that needs no key, so it can be used without configuring anything. It is never a default and never an automatic fallback: it is contacted only when an image-generation request explicitly names the `pollinations` provider, and only your image prompt and the requested dimensions are sent to image.pollinations.ai. Terms: https://pollinations.ai/terms - Privacy: https://pollinations.ai/privacy
 * **Pexels / Unsplash / Pixabay** (optional, stock photos) — when you add a key and an agent fetches stock photos, your search query is sent to the respective API. Pexels: https://www.pexels.com/terms-of-service/ , https://www.pexels.com/privacy-policy/ — Unsplash: https://unsplash.com/terms , https://unsplash.com/privacy — Pixabay: https://pixabay.com/service/terms/ , https://pixabay.com/service/privacy/
 
-Optional, opt-in usage telemetry (OFF by default): if — and only if — you turn it on, the plugin sends your site URL, site name, plugin/WordPress/PHP versions, and multisite flag to https://webchanges.searchactions.com/api/plugin/activations so the maintainer can count active installs. No content or credentials are ever sent. Nothing is transmitted unless you opt in.
 
 == Installation ==
 
-1. On WordPress 6.9+ the Abilities API is built in. On older versions, install and activate the "Abilities API" plugin first (https://wordpress.org/plugins/abilities-api/).
+1. Make sure the site runs WordPress 6.9 or newer; the Abilities API this plugin builds on ships in core from 6.9.
 2. Upload this plugin and activate it.
 3. Open the Webchanges admin page, enable the connector, and create a WordPress Application Password.
 4. Add the shown MCP endpoint + credentials to your AI client, and enable the abilities you want from the Abilities Manager.
@@ -59,7 +58,7 @@ No. This edition ships no PHP-execution or filesystem write/read abilities.
 The MCP endpoint requires a `manage_options` (administrator) application password, and high-risk actions are gated per ability.
 
 = Does it phone home? =
-No, unless you explicitly opt in to usage telemetry. It is off by default.
+No. The plugin sends nothing to the author, ever - no telemetry, no usage stats, no activation ping. The only outbound requests are to the image and stock-photo providers listed under External services, and only when an action you run uses one.
 
 == Changelog ==
 

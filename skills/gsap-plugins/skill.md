@@ -8,8 +8,8 @@ tags: gsap, plugins, scrollsmoother, flip, splittext, draggable
 # GSAP Plugins
 
 Register any plugin once before use: `gsap.registerPlugin(ScrollTrigger, Flip, SplitText);`
-Plugins are separate script files — enqueue the ones you use (cdnjs:
-`gsap/3.12.5/<Plugin>.min.js`).
+Plugins are separate script files — register and enqueue each one you use
+(`<Plugin>.min.js`) from a copy hosted on the site itself, not from a CDN.
 
 ## Pick the plugin for the effect
 

@@ -373,9 +373,8 @@ add_action(WEBCHANGES_CONNECTOR_JOB_RUN_HOOK, static function ($id): void {
 add_action('wp_ajax_nopriv_webchanges_job_tick', 'webchanges_connector_job_ajax_tick');
 add_action('wp_ajax_webchanges_job_tick', 'webchanges_connector_job_ajax_tick');
 
-// Stop any pending chunk ticks when the plugin is deactivated (mirrors the
-// telemetry heartbeat cleanup). In-flight job option records are left in place
-// so a re-activation can resume/inspect them.
+// Stop any pending chunk ticks when the plugin is deactivated. In-flight job
+// option records are left in place so a re-activation can resume/inspect them.
 if (defined('WEBCHANGES_CONNECTOR_FILE')) {
     register_deactivation_hook(WEBCHANGES_CONNECTOR_FILE, static function (): void {
         wp_clear_scheduled_hook(WEBCHANGES_CONNECTOR_JOB_RUN_HOOK);
