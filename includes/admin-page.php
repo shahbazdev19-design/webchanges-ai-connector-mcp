@@ -124,7 +124,7 @@ function webchanges_connector_render_admin_page(): void
 
         .wc-header {
             display: flex; align-items: center; justify-content: space-between;
-            gap: 16px; margin-bottom: 28px;
+            gap: 16px; margin-bottom: 28px; flex-wrap: wrap;
         }
         .wc-brand { display: flex; align-items: center; gap: 14px; }
         .wc-logo {
@@ -592,7 +592,7 @@ function webchanges_connector_render_admin_page(): void
             <div class="wc-brand">
                 <img class="wc-logo" src="<?php echo esc_url(WEBCHANGES_CONNECTOR_URL . 'assets/icon-256x256.png'); ?>" alt="" />
                 <div>
-                    <div class="wc-brand-title"><?php esc_html_e('Webchanges Connector', 'webchanges-ai-connector-mcp'); ?></div>
+                    <div class="wc-brand-title"><?php esc_html_e('Webchanges – AI Connector (MCP)', 'webchanges-ai-connector-mcp'); ?></div>
                     <div class="wc-brand-sub"><?php /* translators: %s is the plugin version */ printf(esc_html__('v%s · MCP endpoint for AI agents', 'webchanges-ai-connector-mcp'), esc_html(WEBCHANGES_CONNECTOR_VERSION)); ?></div>
                 </div>
             </div>
