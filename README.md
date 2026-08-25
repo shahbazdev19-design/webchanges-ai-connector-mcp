@@ -7,4 +7,4 @@ This is the **WordPress.org (Lite) edition** — the guideline-compliant subset 
 - Requires WordPress 6.9+ (Abilities API in core) or the standalone "Abilities API" plugin.
 - Requires PHP 8.0+.
 - Author: Shahbaz Dev — https://shahbazdev.com/
-- License: AGPL-3.0-or-later
+- License: GPL-2.0-or-later
