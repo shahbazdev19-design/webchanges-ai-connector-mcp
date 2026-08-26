@@ -71,6 +71,11 @@ def check_single_plugin_header(root):
 
 
 def build(root, out):
+    # The output may legitimately sit inside the tree being walked (CI writes to
+    # ./dist). Archiving it would add a partial copy of the zip to itself -- and
+    # on Linux hangs outright, because zipfile reads to EOF while writing keeps
+    # moving EOF. Skip the output path explicitly.
+    out_real = os.path.realpath(out)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as archive:
         for base, dirs, files in os.walk(root):
             dirs[:] = [d for d in dirs if not d.startswith(".")]
@@ -78,6 +83,8 @@ def build(root, out):
                 if name.startswith(".") or name in SKIP_FILES:
                     continue
                 path = os.path.join(base, name)
+                if os.path.realpath(path) == out_real:
+                    continue
                 rel = os.path.relpath(path, root).replace(os.sep, "/")
                 archive.write(path, f"{SLUG}/{rel}")
     return out

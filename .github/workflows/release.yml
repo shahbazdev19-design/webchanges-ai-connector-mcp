@@ -17,6 +17,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -36,28 +37,32 @@ jobs:
       # second file carries a "Plugin Name:" header, or if anything hidden would
       # ship. Better a red build than a broken release.
       - name: Build and verify the plugin zip
+        id: build
         env:
           VERSION: ${{ steps.version.outputs.value }}
         run: |
-          mkdir -p dist
+          # Written outside the repo so it can never be walked into itself.
+          OUT="$RUNNER_TEMP/webchanges-ai-connector-mcp.zip"
           if [ -n "$VERSION" ]; then
-            python3 .github/build-zip.py --version "$VERSION" --out dist/webchanges-ai-connector-mcp.zip
+            python3 .github/build-zip.py --version "$VERSION" --out "$OUT"
           else
-            python3 .github/build-zip.py --out dist/webchanges-ai-connector-mcp.zip
+            python3 .github/build-zip.py --out "$OUT"
           fi
+          echo "zip=$OUT" >> "$GITHUB_OUTPUT"
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: webchanges-ai-connector-mcp
-          path: dist/webchanges-ai-connector-mcp.zip
+          path: ${{ steps.build.outputs.zip }}
 
       - name: Publish release
         if: github.ref_type == 'tag'
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
+          ZIP: ${{ steps.build.outputs.zip }}
         run: |
-          gh release create "$TAG" dist/webchanges-ai-connector-mcp.zip \
+          gh release create "$TAG" "$ZIP" \
             --title "$TAG" \
             --generate-notes
