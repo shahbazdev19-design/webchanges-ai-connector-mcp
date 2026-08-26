@@ -18,9 +18,9 @@ if (!defined('ABSPATH')) {
  *   - Custom: per-site skills stored in the `webchanges_connector_skills`
  *     option (created via webchanges/skills-save).
  *
- * A skill MAY carry an executable "macro": an ordered list of steps, each
- * either a webchanges ability call or a built-in `write_asset` action. The
- * webchanges/skills-run ability executes it with parameter substitution.
+ * A skill MAY carry an executable "macro": an ordered list of webchanges
+ * ability calls. The webchanges/skills-run ability executes it with parameter
+ * substitution.
  */
 
 /** Absolute path to the bundled skills directory. */
@@ -342,9 +342,8 @@ function webchanges_skills_lookup(string $path, array $ctx)
 /**
  * Execute a skill's macro.
  *
- * Each step is one of:
- *   {"id":"x","ability":"webchanges/...","params":{...}}   call a webchanges ability
- *   {"id":"x","action":"write_asset","asset":"file.php","dest":"wp-content/.../file.php"}
+ * Each step is a webchanges ability call:
+ *   {"id":"x","ability":"webchanges/...","params":{...}}
  *
  * Stops on the first failing step (returns partial results + error).
  *
@@ -373,27 +372,16 @@ function webchanges_skills_run(string $slug, array $inputs = []): array
         }
         $id = (string) ($step['id'] ?? ('step' . $i));
 
-        // Built-in action: write a bundled asset into the filesystem.
+        // `write_asset` copied a bundled file to an arbitrary path under the
+        // WordPress root. This edition ships no filesystem-write abilities, so
+        // the action is refused rather than carried out.
         if (($step['action'] ?? '') === 'write_asset') {
-            if (($skill['source'] ?? '') !== 'bundled' || empty($skill['dir'])) {
-                return ['ok' => false, 'ran' => $ran, 'outputs' => $ctx['steps'], 'error' => 'write_asset is only available to bundled skills.'];
-            }
-            $asset = (string) webchanges_skills_resolve($step['asset'] ?? '', $ctx);
-            $dest = (string) webchanges_skills_resolve($step['dest'] ?? '', $ctx);
-            $asset_path = $skill['dir'] . '/assets/' . ltrim(basename($asset), '/');
-            if (!is_file($asset_path)) {
-                return ['ok' => false, 'ran' => $ran, 'outputs' => $ctx['steps'], 'error' => sprintf('Asset "%s" not found in skill.', $asset)];
-            }
-            $resolved_dest = function_exists('webchanges_connector_resolve_path') ? webchanges_connector_resolve_path($dest) : null;
-            if ($resolved_dest === null) {
-                return ['ok' => false, 'ran' => $ran, 'outputs' => $ctx['steps'], 'error' => sprintf('Destination "%s" escapes the project root.', $dest)];
-            }
-            wp_mkdir_p(dirname($resolved_dest));
-            $bytes = file_put_contents($resolved_dest, (string) file_get_contents($asset_path));
-            $result = ['written' => $bytes !== false, 'bytes' => (int) $bytes, 'dest' => $dest];
-            $ctx['steps'][$id] = $result;
-            $ran[] = ['id' => $id, 'action' => 'write_asset', 'result' => $result];
-            continue;
+            return [
+                'ok' => false,
+                'ran' => $ran,
+                'outputs' => $ctx['steps'],
+                'error' => 'The write_asset action is not available in this edition: it writes files outside the plugin directory.',
+            ];
         }
 
         // Ability call.

@@ -22,7 +22,7 @@ webchanges_connector_register_ability('skills-save', [
             'version' => ['type' => 'string'],
             'tags' => ['type' => 'array', 'items' => ['type' => 'string']],
             'body' => ['type' => 'string'],
-            'macro' => ['type' => 'array', 'description' => 'Optional ordered steps; each is {id, ability, params} or {id, action:"write_asset", asset, dest}.'],
+            'macro' => ['type' => 'array', 'description' => 'Optional ordered steps; each is {id, ability, params}.'],
         ],
         'required' => ['body'],
         'additionalProperties' => false,

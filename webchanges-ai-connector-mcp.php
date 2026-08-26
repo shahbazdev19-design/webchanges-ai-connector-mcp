@@ -25,7 +25,6 @@ define('WEBCHANGES_CONNECTOR_DIR', plugin_dir_path(__FILE__));
 define('WEBCHANGES_CONNECTOR_URL', plugin_dir_url(__FILE__));
 define('WEBCHANGES_CONNECTOR_SLUG', 'webchanges-ai-connector-mcp');
 define('WEBCHANGES_CONNECTOR_NAMESPACE', 'webchanges');
-define('WEBCHANGES_CONNECTOR_SANDBOX_DIR', WP_CONTENT_DIR . '/webchanges-sandbox/');
 define('WEBCHANGES_CONNECTOR_MAX_EXECUTION_TIME', 30);
 
 // Defer to any plugin that has already started loading the MCP Adapter
@@ -437,4 +436,3 @@ add_action('wp_abilities_api_init', static function () {
     }
 });
 
-wp_mkdir_p(WEBCHANGES_CONNECTOR_SANDBOX_DIR);

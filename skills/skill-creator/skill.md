@@ -29,8 +29,6 @@ skills/
   my-skill/
     skill.md          # required: frontmatter + instructions
     macro.json        # optional: ordered runnable steps
-    assets/           # optional: files a write_asset step installs
-      something.php
 ```
 
 `skill.md` starts with frontmatter, then markdown:
@@ -62,15 +60,11 @@ step types:
   { "id": "make_page", "ability": "webchanges/create-post",
     "params": { "post_type": "page", "title": "{{input.title}}", "status": "draft" } },
   { "id": "set_body", "ability": "webchanges/bricks-set-elements",
-    "params": { "post_id": "{{steps.make_page.post_id}}", "elements": [] } },
-  { "id": "loader", "action": "write_asset",
-    "asset": "something.php", "dest": "wp-content/mu-plugins/something.php" }
+    "params": { "post_id": "{{steps.make_page.post_id}}", "elements": [] } }
 ]
 ```
 
 - `ability` steps call any `webchanges/*` ability with `params`.
-- `action: "write_asset"` copies `assets/<asset>` into a path under the site
-  root (bundled skills only).
 - **Placeholders:** `{{input.X}}` pulls from the `inputs` passed to skills-run;
   `{{steps.ID.field}}` pulls a field from an earlier step's output. A
   whole-string placeholder keeps the original type (int/array); embedded ones
